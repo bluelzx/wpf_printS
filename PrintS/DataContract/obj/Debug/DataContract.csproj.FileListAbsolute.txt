@@ -1,0 +1,9 @@
+E:\wpf\PrintS\DataContract\bin\Debug\DataContract.dll
+E:\wpf\PrintS\DataContract\bin\Debug\DataContract.pdb
+E:\wpf\PrintS\DataContract\bin\Debug\CommonLib.dll
+E:\wpf\PrintS\DataContract\bin\Debug\System.Data.SQLite.dll
+E:\wpf\PrintS\DataContract\bin\Debug\Newtonsoft.Json.dll
+E:\wpf\PrintS\DataContract\bin\Debug\CommonLib.pdb
+E:\wpf\PrintS\DataContract\obj\Debug\DataContract.csprojResolveAssemblyReference.cache
+E:\wpf\PrintS\DataContract\obj\Debug\DataContract.dll
+E:\wpf\PrintS\DataContract\obj\Debug\DataContract.pdb

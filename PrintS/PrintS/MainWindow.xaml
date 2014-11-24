@@ -1,0 +1,45 @@
+﻿<Window x:Class="PrintS.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:uc="clr-namespace:PrintS.UC"
+        Title="PrintS" Height="900" Width="1440" 
+        Loaded="Window_Loaded" WindowState="Maximized" WindowStyle="None">
+    <Grid Background="#e2efe1">
+        <Image Name="imgLeft" Source="Image/1.jpg"
+            Height="900" HorizontalAlignment="Left" Margin="0,0,0,0" Stretch="Fill" VerticalAlignment="Top" Width="900" />
+
+        <uc:RollImg x:Name="rollImg"
+            Height="900" HorizontalAlignment="Left" Margin="0,0,0,0" VerticalAlignment="Top" Width="900" />
+
+        <Image Name="imgTitle" Source="Image/4.png"
+            Height="65" HorizontalAlignment="Left" Margin="1219,23,0,0" Stretch="Fill" VerticalAlignment="Top" Width="161" />
+
+        <Image Name="imgQR" Source="Image/3.png"
+            Height="220" HorizontalAlignment="Left" Margin="1190,85,0,0" Stretch="Fill" VerticalAlignment="Top" Width="220" />
+
+        <Image Name="imgEwm"
+            Height="220" HorizontalAlignment="Left" Margin="1190,85,0,0" Stretch="Fill" VerticalAlignment="Top" Width="220" />
+
+        <TextBlock Name="textBlock1" Text="随心码" Foreground="#555555"
+            Height="50" HorizontalAlignment="Left" Margin="1241,374,0,0" VerticalAlignment="Top" FontSize="36" Width="112" FontWeight="Regular" TextAlignment="Center" />
+
+        <TextBlock Name="txtCode" Text="---"
+            Height="88" HorizontalAlignment="Left" Margin="1241,415,0,0" VerticalAlignment="Top" Width="112" FontSize="65" TextAlignment="Center" Foreground="#ee5729" />
+
+        <TextBlock Height="2" HorizontalAlignment="Left" Margin="1188,542,0,0" Name="textBlock2" Text="" VerticalAlignment="Top" Width="218" Background="White" />
+
+        <TextBlock Name="txtGuide" Text="使用说明"
+            Height="274" HorizontalAlignment="Left" Margin="1194,575,0,0" VerticalAlignment="Top" Width="212" Foreground="#555555" FontSize="20" FontWeight="Regular" TextWrapping="WrapWithOverflow" />
+
+        <Grid Height="900" HorizontalAlignment="Left" Margin="915,0,0,0" Name="grid1" VerticalAlignment="Top" Width="240">
+
+            <uc:PrintTask x:Name="printTask"
+                HorizontalAlignment="Left" Margin="0,0,0,0" VerticalAlignment="Top" Height="900" Width="240" />
+
+            <uc:Printing x:Name="printing" BtnPaperEvent="printing_BtnPaperEvent"
+                HorizontalAlignment="Left" Margin="7,542,0,0" VerticalAlignment="Top" Height="290" Width="208" />
+
+        </Grid>
+
+    </Grid>
+</Window>

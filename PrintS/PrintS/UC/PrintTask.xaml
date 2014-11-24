@@ -1,0 +1,27 @@
+﻿<UserControl x:Class="PrintS.UC.PrintTask"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             mc:Ignorable="d" 
+             d:DesignHeight="900" d:DesignWidth="240">
+    <Grid>
+        <Image Name="image6"
+                Height="140" HorizontalAlignment="Left" Margin="15,0,0,0" Stretch="Fill" VerticalAlignment="Top" Width="140" />
+        <Image Name="image5"
+                Height="140" HorizontalAlignment="Left" Margin="78,75,0,0"  Stretch="Fill" VerticalAlignment="Top" Width="140" />
+        <Image Name="image4"
+                Height="140" HorizontalAlignment="Left" Margin="15,165,0,0" Stretch="Fill" VerticalAlignment="Top" Width="140" />
+        <Image Name="image3"
+                Height="140" HorizontalAlignment="Left" Margin="78,240,0,0" Stretch="Fill" VerticalAlignment="Top" Width="140" />
+        <Image Name="image2"
+                Height="140" HorizontalAlignment="Left" Margin="15,331,0,0" Stretch="Fill" VerticalAlignment="Top" Width="140" />
+
+        <Grid Name="gdPrint"
+                Height="290" HorizontalAlignment="Left" Margin="7,542,0,0" VerticalAlignment="Top" Width="208">
+
+            <Image Name="image1"
+                Height="185" HorizontalAlignment="Left" Margin="10,25,0,0" Stretch="Fill" VerticalAlignment="Top" Width="185" />
+        </Grid>
+    </Grid>
+</UserControl>
