@@ -8,7 +8,7 @@
         <Image Name="imgLeft" Source="Image/1.jpg"
             Height="900" HorizontalAlignment="Left" Margin="0,0,0,0" Stretch="Fill" VerticalAlignment="Top" Width="900" />
 
-        <uc:RollImg x:Name="rollImg"
+        <uc:RollImg x:Name="rollImg" StoryType="Opacity" TimeHold="3" TimeChange="2"
             Height="900" HorizontalAlignment="Left" Margin="0,0,0,0" VerticalAlignment="Top" Width="900" />
 
         <Image Name="imgTitle" Source="Image/4.png"
@@ -40,6 +40,8 @@
                 HorizontalAlignment="Left" Margin="7,542,0,0" VerticalAlignment="Top" Height="290" Width="208" />
 
         </Grid>
-
+        
+        <Button Name="btnClose" Style="{StaticResource ResourceKey=BtnClose}"
+                Height="35" HorizontalAlignment="Right" Margin="0,0,0,0" VerticalAlignment="Top" Width="35" Click="btnClose_Click" />
     </Grid>
 </Window>

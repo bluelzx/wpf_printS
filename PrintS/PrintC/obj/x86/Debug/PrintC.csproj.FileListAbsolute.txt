@@ -20,4 +20,3 @@ E:\wpf\PrintS\PrintC\bin\Debug\IMG\logo.png
 E:\wpf\PrintS\PrintC\bin\Debug\ADV\logo.png
 E:\wpf\PrintS\PrintC\bin\Debug\EWM\logo.png
 E:\wpf\PrintS\PrintC\bin\Debug\BOT\logo.png
-E:\GitHub\wpf_printS\PrintS\PrintC\bin\Debug\PrintC.exe.config

@@ -16,6 +16,24 @@ namespace CommonLib.Http
 {
     public class Json : Http
     {
+        /// <summary>
+        /// post请求，引用Newtonsoft.Json.dll
+        /// 示例：
+        /// IDictionary<string, string> parameters = new Dictionary<string, string>();
+        /// parameters.Add("p_id", appid);
+        /// JArray arr = Json.PostArr(urlTask, parameters, null, null, encoding, null);
+        /// foreach (var r in arr)
+        /// {
+        ///     string pid = r["id"].ToString();
+        /// }
+        /// </summary>
+        /// <param name="url"></param>
+        /// <param name="parameters"></param>
+        /// <param name="timeout"></param>
+        /// <param name="userAgent"></param>
+        /// <param name="requestEncoding"></param>
+        /// <param name="cookies"></param>
+        /// <returns></returns>
         public static JArray PostArr(string url, IDictionary<string, string> parameters, int? timeout, string userAgent, Encoding requestEncoding, CookieCollection cookies)
         {
             JArray ja = new JArray();

@@ -6,40 +6,40 @@ using System.Text;
 namespace CommonLib.Printer
 {
     // 打印机状态集合
-    public enum enum_printerSys_status
+    public enum PrinterSysStatus
     {
         /// <summary>
         /// 其他状态
         /// </summary>
-        other = 1,
+        Other = 1,
         /// <summary>
         /// 未知
         /// </summary>
-        unknown,
+        Unknown,
         /// <summary>
         /// 空闲
         /// </summary>
-        free,
+        Free,
         /// <summary>
         /// 正在打印
         /// </summary>
-        print,
+        Print,
         /// <summary>
         /// 预热
         /// </summary>
-        warmup,
+        Warmup,
         /// <summary>
         /// 停止打印
         /// </summary>
-        stop,
+        Stop,
         /// <summary>
         /// 打印中
         /// </summary>
-        printing,
+        Printing,
         /// <summary>
         /// 离线
         /// </summary>
-        offline,
+        Offline,
     }
 
     public class PrinterSys : Printer
@@ -53,9 +53,9 @@ namespace CommonLib.Printer
         /// 获取打印机状态
         /// </summary>
         /// <returns></returns>
-        public enum_printerSys_status getStatus()
+        public PrinterSysStatus getStatus()
         {
-            return (enum_printerSys_status)base.getStatus();
+            return (PrinterSysStatus)base.getStatus();
         }
     }
 }

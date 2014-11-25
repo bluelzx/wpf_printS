@@ -56,7 +56,7 @@ namespace PrintS
         void init()
         {
             // 初始化
-            this.Topmost = true;
+            //this.Topmost = true;
             appSta = AppStatus.play;
             ms = new DB(ConfigurationManager.AppSettings["dbpath"]);
             this.txtGuide.Text = "使用说明： \r\n 1、打开微信，扫一扫二维码 \r\n 2、关注微信后，发送图片 \r\n 3、输入“随心码”，即可打印照片";
@@ -286,6 +286,12 @@ namespace PrintS
                     this.printing.ShowProBar();
                 }
             }
+        }
+
+        // 关闭按钮
+        private void btnClose_Click(object sender, RoutedEventArgs e)
+        {
+            this.Close();
         }
 
     }

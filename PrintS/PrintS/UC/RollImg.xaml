@@ -9,10 +9,10 @@
         <Canvas Name="canvas_board" ClipToBounds="True"
             Height="900" HorizontalAlignment="Left" Margin="0,0,0,0" VerticalAlignment="Top" Width="900">
 
-            <Image Name="image1"
+            <Image Name="image1" Opacity="1.0"
                 Canvas.Left="0" Canvas.Top="0" Height="900" Stretch="Fill" Width="900" />
 
-            <Image Name="image2"
+            <Image Name="image2" Opacity="1.0"
                 Canvas.Left="0" Canvas.Top="0" Height="900" Stretch="Fill" Width="900" />
 
         </Canvas>

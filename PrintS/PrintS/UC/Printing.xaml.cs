@@ -40,14 +40,20 @@ namespace PrintS.UC
                     DoubleAnimation da = new DoubleAnimation();
                     da.From = 0;
                     da.To = this.brPro.Width;
-                    da.Duration = new Duration(new TimeSpan(0, 0, 40));
+                    da.Duration = new Duration(new TimeSpan(0, 0, 38));
                     _sb_probar.Children.Add(da);
-
+                    _sb_probar.Completed += new EventHandler(_sb_probar_Completed);
                     Storyboard.SetTarget(da, this.gdBar);
                     Storyboard.SetTargetProperty(da, new PropertyPath("(Grid.Width)"));
                 }
                 return _sb_probar;
             }
+        }
+
+        // 进度条完成后
+        void _sb_probar_Completed(object sender, EventArgs e)
+        {
+            
         }
 
         /// <summary>

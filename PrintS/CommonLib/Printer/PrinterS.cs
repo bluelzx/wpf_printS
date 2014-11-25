@@ -6,24 +6,24 @@ using System.Text;
 namespace CommonLib.Printer
 {
     // 打印机可用状态集合
-    public enum enum_printerS_status
+    public enum PrinterSStatus
     {
         /// <summary>
         /// 故障
         /// </summary>
-        warn = 0,
+        Warn = 0,
         /// <summary>
         /// 打印中
         /// </summary>
-        print,
+        Print,
         /// <summary>
         /// 空闲中
         /// </summary>
-        ready,
+        Ready,
         /// <summary>
         /// 其他状态
         /// </summary>
-        other
+        Other
     }
 
     public class PrinterS : PrinterSys
@@ -38,25 +38,25 @@ namespace CommonLib.Printer
         /// 获取打印机状态
         /// </summary>
         /// <returns></returns>
-        public enum_printerS_status getStatus()
+        public PrinterSStatus getStatus()
         {
-            enum_printerSys_status statusSys = base.getStatus();
-            enum_printerS_status status;
+            PrinterSysStatus statusSys = base.getStatus();
+            PrinterSStatus status;
             switch (statusSys)
             {
                 // Epson
-                case enum_printerSys_status.free:
-                    status = enum_printerS_status.ready;
+                case PrinterSysStatus.Free:
+                    status = PrinterSStatus.Ready;
                     break;
-                case enum_printerSys_status.print:
-                case enum_printerSys_status.printing:
-                    status = enum_printerS_status.print;
+                case PrinterSysStatus.Print:
+                case PrinterSysStatus.Printing:
+                    status = PrinterSStatus.Print;
                     break;
-                case enum_printerSys_status.warmup:
-                    status = enum_printerS_status.other;
+                case PrinterSysStatus.Warmup:
+                    status = PrinterSStatus.Other;
                     break;
                 default:
-                    status = enum_printerS_status.warn;
+                    status = PrinterSStatus.Warn;
                     break;
             }
             return status;

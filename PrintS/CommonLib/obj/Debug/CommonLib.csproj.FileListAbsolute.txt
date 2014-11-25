@@ -4,3 +4,4 @@ E:\wpf\PrintS\CommonLib\bin\Debug\Newtonsoft.Json.dll
 E:\wpf\PrintS\CommonLib\bin\Debug\System.Data.SQLite.DLL
 E:\wpf\PrintS\CommonLib\obj\Debug\CommonLib.dll
 E:\wpf\PrintS\CommonLib\obj\Debug\CommonLib.pdb
+E:\wpf\PrintS\CommonLib\obj\Debug\CommonLib.csprojResolveAssemblyReference.cache

@@ -122,11 +122,11 @@ namespace PrintC
             get { return _isTask; }
         }
 
-        private enum_printerS_status _printerSta;
+        private PrinterSStatus _printerSta;
         /// <summary>
         /// 记录上一次打印机的状态
         /// </summary>
-        public enum_printerS_status printerSta
+        public PrinterSStatus printerSta
         {
             set
             {
@@ -198,7 +198,7 @@ namespace PrintC
             pathBot = string.Format(@"{0}\BOT", System.Windows.Forms.Application.StartupPath);
             // 打印机
             printer = new PrinterS(ConfigurationManager.AppSettings["printer"]);
-            printerSta = enum_printerS_status.ready;
+            printerSta = PrinterSStatus.Ready;
             printLimit = Convert.ToInt32(ConfigurationManager.AppSettings["pLimit"]);
             // 各请求url
             encoding = Encoding.GetEncoding("utf-8");
@@ -465,14 +465,14 @@ namespace PrintC
         void tPrint_Tick(object sender, EventArgs e)
         {
             // 当前轮询打印机的状态
-            enum_printerS_status _printerSta = printer.getStatus();
+            PrinterSStatus _printerSta = printer.getStatus();
 
-            if (_printerSta == enum_printerS_status.warn)
+            if (_printerSta == PrinterSStatus.Warn)
             {
                 // 打印机故障
                 return;
             }
-            if (_printerSta == enum_printerS_status.other)
+            if (_printerSta == PrinterSStatus.Other)
             {
                 // 打印机其他状态
                 return;
@@ -490,7 +490,7 @@ namespace PrintC
             Task task = listTask[0];
 
             // 打印机 打印中->打印中
-            if (printerSta == enum_printerS_status.print && _printerSta == enum_printerS_status.print)
+            if (printerSta == PrinterSStatus.Print && _printerSta == PrinterSStatus.Print)
             {
                 // 打印机打印中刚才任务
                 printerSta = _printerSta;
@@ -498,7 +498,7 @@ namespace PrintC
             }
 
             // 打印机 空闲中->打印中
-            if (printerSta == enum_printerS_status.ready && _printerSta == enum_printerS_status.print)
+            if (printerSta == PrinterSStatus.Ready && _printerSta == PrinterSStatus.Print)
             {
                 // 打印机打印中刚才任务
                 printerSta = _printerSta;
@@ -506,7 +506,7 @@ namespace PrintC
             }
 
             // 打印机 打印中->空闲中
-            if (printerSta == enum_printerS_status.print && _printerSta == enum_printerS_status.ready)
+            if (printerSta == PrinterSStatus.Print && _printerSta == PrinterSStatus.Ready)
             {
                 // 完成刚才的打印任务
                 printerSta = _printerSta;
