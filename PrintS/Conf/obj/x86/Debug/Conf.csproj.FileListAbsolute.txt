@@ -1,0 +1,16 @@
+E:\wpf\PrintS\Publish\ADV\logo.png
+E:\wpf\PrintS\Publish\BOT\logo.png
+E:\wpf\PrintS\Publish\EWM\logo.png
+E:\wpf\PrintS\Publish\IMG\logo.png
+E:\wpf\PrintS\Publish\Print\logo.png
+E:\wpf\PrintS\Publish\Print\Print.html
+E:\wpf\PrintS\Publish\Conf.exe.config
+E:\wpf\PrintS\Publish\Conf.exe
+E:\wpf\PrintS\Publish\Conf.pdb
+E:\wpf\PrintS\Conf\obj\x86\Debug\Conf.Properties.Resources.resources
+E:\wpf\PrintS\Conf\obj\x86\Debug\Conf.csproj.GenerateResource.Cache
+E:\wpf\PrintS\Conf\obj\x86\Debug\Conf.exe
+E:\wpf\PrintS\Conf\obj\x86\Debug\Conf.pdb
+E:\wpf\PrintS\Conf\obj\x86\Debug\Conf.csprojResolveAssemblyReference.cache
+E:\wpf\PrintS\Conf\obj\x86\Debug\Conf.FrmConf.resources
+E:\wpf\PrintS\Publish\Print\photo.png

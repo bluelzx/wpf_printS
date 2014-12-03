@@ -1,6 +1,6 @@
 ﻿namespace PrintC
 {
-    partial class Form1
+    partial class FrmPrintC
     {
         /// <summary>
         /// 必需的设计器变量。
@@ -201,7 +201,7 @@
             this.lsBot.Size = new System.Drawing.Size(120, 88);
             this.lsBot.TabIndex = 16;
             // 
-            // Form1
+            // FrmPrintC
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
@@ -223,8 +223,8 @@
             this.Controls.Add(this.label1);
             this.Controls.Add(this.wbPrint);
             this.Controls.Add(this.lsTask);
-            this.Name = "Form1";
-            this.Text = "Form1";
+            this.Name = "FrmPrintC";
+            this.Text = "PrintC";
             this.Load += new System.EventHandler(this.Form1_Load);
             this.ResumeLayout(false);
             this.PerformLayout();

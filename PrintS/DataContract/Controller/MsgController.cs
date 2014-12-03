@@ -14,14 +14,14 @@ using System.Data;
 
 namespace DataContract.Controller
 {
-    public class PrintMsgController
+    public class MsgController
     {
         private Sqlite ms;
         private string table;
 
-        public PrintMsgController(Sqlite _ms, string _table)
+        public MsgController(string _table)
         {
-            this.ms = _ms;
+            this.ms = AppClient.sqlite;
             this.table = _table;
         }
 

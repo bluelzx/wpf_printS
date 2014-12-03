@@ -29,6 +29,9 @@ using System.IO;
 // .net System.Management
 using System.Management;
 
+// Conf.dll
+using Conf;
+
 /*
  * task表state说明
  * 0：无效的打印任务
@@ -38,9 +41,9 @@ using System.Management;
 
 namespace PrintC
 {
-    public partial class Form1 : Form
+    public partial class FrmPrintC : Form
     {
-        public Form1()
+        public FrmPrintC()
         {
             InitializeComponent();
         }
@@ -65,7 +68,7 @@ namespace PrintC
                     tCode.Start();      // 请求打印码，同时返回是否请求打印任务，是否开始数据更新
                     tTask.Start();      // 请求打印任务
                     tPrint.Start();     // 执行打印
-                    tData.Start();    // 请求轮播图，二维码
+                    tReload.Start();    // 请求轮播图，二维码
                 }
                 else
                 {
@@ -73,7 +76,7 @@ namespace PrintC
                     tCode.Stop();      // 请求打印码，同时返回是否请求打印任务，是否开始数据更新
                     tTask.Stop();      // 请求打印任务
                     tPrint.Stop();     // 执行打印
-                    tData.Stop();    // 请求轮播图，二维码
+                    tReload.Stop();    // 请求轮播图，二维码
                 }
                 this.lbApp.Text = "程序状态：" + Convert.ToString(_appSta);
             }
@@ -82,7 +85,7 @@ namespace PrintC
 
         bool _isData;
         /// <summary>
-        /// 是否数据更新
+        /// 是否更新数据
         /// </summary>
         bool isData
         {
@@ -99,6 +102,27 @@ namespace PrintC
                 }
             }
             get { return this._isData; }
+        }
+
+        bool _isReload;
+        /// <summary>
+        /// 是否开始下载数据更新
+        /// </summary>
+        bool isReload
+        {
+            set
+            {
+                _isReload = value;
+                if (value)
+                {
+                    this.lbData.Text = "数据更新：start";
+                }
+                else
+                {
+                    this.lbData.Text = "数据更新：stop";
+                }
+            }
+            get { return this._isReload; }
         }
 
         bool _isTask;
@@ -150,30 +174,16 @@ namespace PrintC
             get { return _printLimit; }
         }
 
-        string appid;       // 设备id
         PrinterS printer;   // 打印机
 
-        string urlTask; // 请求打印任务组的url
-        string urlPost; // 返回打印结果的url
-        string urlCode; // 请求打印码的url
-        string urlAdv;  // 请求轮播图图片素材的url
-
-        string pathPrint;   // 打印排版素材的路径
-        string pathImg;     // 下载用户照片的路径
-        string pathAdv;     // 轮播图下载的路径
-        string pathEwm;     // 二维码下载的路径
-        string pathBot;     // 打印底图下载的路径
-
-        Encoding encoding;  // 请求编码格式
-
-        DB ms;  // 数据库task表操作
+        Encoding encoding = Encoding.GetEncoding("utf-8");
 
         Timer tApp;     // 程序心跳时钟
         Timer tTask;    // 请求打印任务组的时钟
         Timer tPrint;   // 执行打印任务的时钟
         Timer tCode;    // 请求打印码的时钟
         Timer tPrintOT; // 打印机工作超时判断，是否故障
-        Timer tData;     // 请求数据更新时钟（轮播图，二维码，打印底图）
+        Timer tReload;     // 请求数据更新时钟（轮播图，二维码，打印底图）
 
         List<Task> listTask;    // 当前预打印任务表
         List<Adv> listAdv;      // 当前轮播图列表
@@ -182,40 +192,27 @@ namespace PrintC
         void Init()
         {
             // 初始化
-            appid = ConfigurationManager.AppSettings["appid"];
-            ms = new DB(ConfigurationManager.AppSettings["dbpath"]);
             isTask = true;
-            isData = false;
+            isReload = false;
+            isData = AppClient.isData;
             // 用于显示列表
             listTask = new List<Task>();
             listAdv = new List<Adv>();
             listEwm = new List<Ewm>();
-            // 各程序数据路径
-            pathPrint = string.Format(@"{0}\Print", System.Windows.Forms.Application.StartupPath);
-            pathImg = string.Format(@"{0}\IMG", System.Windows.Forms.Application.StartupPath);
-            pathAdv = string.Format(@"{0}\ADV", System.Windows.Forms.Application.StartupPath);
-            pathEwm = string.Format(@"{0}\EWM", System.Windows.Forms.Application.StartupPath);
-            pathBot = string.Format(@"{0}\BOT", System.Windows.Forms.Application.StartupPath);
             // 打印机
-            printer = new PrinterS(ConfigurationManager.AppSettings["printer"]);
+            printer = new PrinterS(AppClient.printer);
             printerSta = PrinterSStatus.Ready;
-            printLimit = Convert.ToInt32(ConfigurationManager.AppSettings["pLimit"]);
-            // 各请求url
-            encoding = Encoding.GetEncoding("utf-8");
-            urlTask = ConfigurationManager.AppSettings["pTask"];
-            urlPost = ConfigurationManager.AppSettings["pPost"];
-            urlCode = ConfigurationManager.AppSettings["pCode"];
-            urlAdv = ConfigurationManager.AppSettings["pAdv"];
+            printLimit = AppClient.pLimit;
 
             // 显示最近获取的打印码
-            this.lsCode.Items.Add(ms.code.getLastCode());
+            this.lsCode.Items.Add(DB.code.getLastCode());
 
             // 获取打印任务队列
-            int count = ms.task.countTask(1);
+            int count = DB.task.countTask(1);
             if (count > 0)
             {
                 listTask.Clear();
-                DataRow[] rows = ms.task.getTasks(1);
+                DataRow[] rows = DB.task.getTasks(1);
                 foreach (DataRow row in rows)
                 {
                     listTask.Add(new Task(row["id"], row["pid"], row["url"], row["pic"], row["state"], row["created"], row["updated"]));
@@ -226,27 +223,27 @@ namespace PrintC
                 (from o in listTask select o.pid.ToString()).ToArray());
 
             // 显示现在显示的轮播图队列
-            count = ms.adv.countData();
+            count = DB.adv.countData();
             if (count > 0)
             {
                 this.showList(this.lsAdv,
-                    ms.adv.getDatas().Select(x => x["pid"].ToString()).ToArray());
+                    DB.adv.getDatas().Select(x => x["pid"].ToString()).ToArray());
             }
 
             // 显示现在显示的二维码
-            count = ms.ewm.countData();
+            count = DB.ewm.countData();
             if (count > 0)
             {
                 this.showList(this.lsEwm,
-                    ms.ewm.getData()["pid"].ToString());
+                    DB.ewm.getData()["pid"].ToString());
             }
 
             // 显示现在在用的打印底图
-            count = ms.bot.countData();
+            count = DB.bot.countData();
             if (count > 0)
             {
                 this.showList(this.lsBot,
-                    ms.bot.getData()["pid"].ToString());
+                    DB.bot.getData()["pid"].ToString());
             }
 
             // 程序心跳时钟
@@ -276,111 +273,68 @@ namespace PrintC
             tPrintOT.Tick += new EventHandler(tPrintOT_Tick);
 
             // 轮播图，二维码
-            tData = new Timer();
-            tData.Interval = 10 * 1000;
-            tData.Tick += new EventHandler(tData_Tick);
+            tReload = new Timer();
+            tReload.Interval = 10 * 1000;
+            tReload.Tick += new EventHandler(tReload_Tick);
 
             // 程序启动
             appSta = AppStatus.play;
         }
 
         // 请求轮播图图片素材
-        void tData_Tick(object sender, EventArgs e)
+        void tReload_Tick(object sender, EventArgs e)
         {
             if (!isData)
+            {
+                // 无需更新
+                return;
+            }
+
+            if (!isReload)
             {
                 return;
             }
 
             try
             {
-                IDictionary<string, string> parameters = new Dictionary<string, string>();
-                parameters.Add("p_id", appid);
-                JObject result = Json.PostObj(urlAdv, parameters, null, null, encoding, null);
+                // 网络请求
+                JObject result = DB.adv.postUrl();
 
-                // 删除现在的数据
+                // 更新轮播图
+                DB.adv.Update(result);
 
-                // 轮播图
-                List<string> adv_pid_arr = new List<string>();  // 在用pid集合
-                for (int i = 0; i < result["adv"].Count(); i++)
-                {
-                    string adv_pid = result["adv"][i]["id"].ToString();
-                    string adv_url = result["adv"][i]["url"].ToString();
-                    string adv_pic = string.Format(@"{0}.{1}", adv_pid, adv_url.Substring(adv_url.LastIndexOf(".") + 1));
-                    // 接收新的轮播图数据
-                    if (!ms.adv.existPid(adv_pid))
-                    {
-                        // 添加到数据库
-                        ms.adv.addData(adv_pid, adv_url, adv_pic);
-                        // 下载图片
-                        Http.downloadThread(adv_url, string.Format(@"{0}\{1}", pathAdv, adv_pic));
-                    }
-                    adv_pid_arr.Add(adv_pid);
-                }
-                // 删除不用的数据
-                ms.adv.delOtherData(adv_pid_arr.ToArray());
+                // 更新二维码
+                DB.ewm.Update(result);
 
-                // 二维码
-                List<string> ewm_pid_arr = new List<string>();  // 在用pid集合
-                string ewm_pid = result["ewm"][0]["id"].ToString();
-                string ewm_url = result["ewm"][0]["url"].ToString();
-                string ewm_pic = string.Format(@"{0}.{1}", ewm_pid, ewm_url.Substring(ewm_url.LastIndexOf(".") + 1));
-                // 接收新的二维码数据
-                if (!ms.ewm.existPid(ewm_pid))
-                {
-                    // 添加到数据库
-                    ms.ewm.addData(ewm_pid, ewm_url, ewm_pic);
-                    // 下载图片
-                    Http.downloadThread(ewm_url, string.Format(@"{0}\{1}", pathEwm, ewm_pic));
-                }
-                ewm_pid_arr.Add(ewm_pid);
-                // 删除不用的数据
-                ms.ewm.delOtherData(ewm_pid_arr.ToArray());
-
-                // 打印底图
-                List<string> bot_pid_arr = new List<string>();  // 在用pid集合
-                string bot_pid = result["bot"][0]["id"].ToString();
-                string bot_url = result["bot"][0]["url"].ToString();
-                string bot_pic = string.Format(@"{0}.{1}", bot_pid, bot_url.Substring(bot_url.LastIndexOf(".") + 1));
-                // 接收新的打印底图数据
-                if (!ms.bot.existPid(bot_pid))
-                {
-                    // 添加到数据库
-                    ms.bot.addData(bot_pid, bot_url, bot_pic);
-                    // 下载图片
-                    Http.downloadThread(bot_url, string.Format(@"{0}\{1}", pathBot, bot_pic));
-                }
-                bot_pid_arr.Add(bot_pid);
-                // 删除不用的数据
-                ms.bot.delOtherData(bot_pid_arr.ToArray());
-
+                // 更新打印底图
+                DB.bot.Update(result);
             }
             catch (Exception ex)
             {
             }
 
             // 显示现在显示的轮播图队列
-            int count = ms.adv.countData();
+            int count = DB.adv.countData();
             if (count > 0)
             {
                 this.showList(this.lsAdv,
-                    ms.adv.getDatas().Select(x => x["pid"].ToString()).ToArray());
+                    DB.adv.getDatas().Select(x => x["pid"].ToString()).ToArray());
             }
 
             // 显示现在显示的二维码
-            count = ms.ewm.countData();
+            count = DB.ewm.countData();
             if (count > 0)
             {
                 this.showList(this.lsEwm,
-                    ms.ewm.getData()["pid"].ToString());
+                    DB.ewm.getData()["pid"].ToString());
             }
 
             // 显示现在在用的打印底图
-            count = ms.bot.countData();
+            count = DB.bot.countData();
             if (count > 0)
             {
                 this.showList(this.lsBot,
-                    ms.bot.getData()["pid"].ToString());
+                    DB.bot.getData()["pid"].ToString());
             }
         }
 
@@ -388,7 +342,7 @@ namespace PrintC
         void tApp_Tick(object sender, EventArgs e)
         {
             // 获取可能有的消息
-            Dictionary<string, object> message = ms.printc.getLastMsg();
+            Dictionary<string, object> message = DB.printc.getLastMsg();
             switch ((MessageCode)message["code"])
             {
                 // 打印机补充纸
@@ -412,7 +366,7 @@ namespace PrintC
             tPrintOT.Stop();
 
             // 添加打印机故障的信息
-            ms.prints.addMessage(MessageCode.printOutPaper, "打印机缺纸");
+            DB.prints.addMessage(MessageCode.printOutPaper, "打印机缺纸");
         }
 
         // 请求打印码的时钟
@@ -421,20 +375,22 @@ namespace PrintC
             try
             {
                 IDictionary<string, string> parameters = new Dictionary<string, string>();
-                parameters.Add("p_id", appid);
-                JObject result = Json.PostObj(urlCode, parameters, null, null, encoding, null);
-                string code = result["code"].ToString();    // 打印码
+                parameters.Add("p_id", AppClient.appId);
+                JObject result = Json.PostObj(AppClient.urlCode, parameters, null, null, encoding, null);
+
+                // 打印码
+                string code = result["code"].ToString();   
 
                 // 是否终止请求任务
                 isTask = !Convert.ToBoolean(result["cut"]);
 
                 // 是否开始数据更新
-                isData = Convert.ToBoolean(result["reload"]);
+                isReload = Convert.ToBoolean(result["reload"]) & isData;
 
                 // 和上一次打印码不同即可
-                if (!ms.code.similarCode(code))
+                if (!DB.code.similarCode(code))
                 {
-                    ms.code.addCode(code);
+                    DB.code.addCode(code);
 
                     this.lsCode.Items.Add(code);
                 }
@@ -514,7 +470,7 @@ namespace PrintC
                 tPrintOT.Stop();
 
                 // 更新本地数据库对应任务的状态
-                ms.task.updateTask(task.id, 2);
+                DB.task.updateTask(task.id, 2);
 
                 // 刷新打印任务列表
                 listTask.RemoveAt(0);
@@ -524,8 +480,8 @@ namespace PrintC
                 {
                     IDictionary<string, string> parameters = new Dictionary<string, string>();
                     parameters.Add("id", task.pid.ToString());
-                    parameters.Add("p_id", appid);
-                    JObject result = Json.PostObj(this.urlPost, parameters, null, null, encoding, null);
+                    parameters.Add("p_id", AppClient.appId);
+                    JObject result = Json.PostObj(AppClient.urlPost, parameters, null, null, encoding, null);
                     // result["data"]=true/false
                 }
                 catch (Exception ex)
@@ -541,7 +497,7 @@ namespace PrintC
                     appSta = AppStatus.pause;
 
                     // 添加打印机故障的信息
-                    ms.prints.addMessage(MessageCode.printOutPaper, "打印机缺纸");
+                    DB.prints.addMessage(MessageCode.printOutPaper, "打印机缺纸");
                 }
 
                 return;
@@ -549,17 +505,18 @@ namespace PrintC
 
             // 打印
             string url = task.url;
-            string html = File.ReadAllText(string.Format(@"{0}\Print.html", pathPrint));
+            string html = File.ReadAllText(string.Format(@"{0}\Print.html", AppClient.pathPrint));
             // 用户照片
             html = html.Replace("$photo", url);
             // 打印底图
-            string logo = string.Format(@"{0}\logo.png", pathPrint);
-            int count = ms.bot.countData();
+            string logo = string.Format(@"{0}\logo.png", AppClient.pathPrint);
+            int count = DB.bot.countData();
             if (count > 0)
             {
                 // 使用数据库中的底图
-                DataRow row = ms.bot.getData();
-                logo = string.Format(@"{0}\{1}", pathBot, row["pic"]);
+                DataRow row = DB.bot.getData();
+                //logo = row["url"].ToString(); // 加载url地址
+                logo = string.Format(@"{0}\{1}", AppClient.pathBot, row["pic"]);    // 暂不显示本地的.jpg打印底图
             }
             html = html.Replace("$logo", logo);
             if (this.wbPrint.DocumentText != html)  // 防止重复打印相同的照片
@@ -584,8 +541,8 @@ namespace PrintC
             try
             {
                 IDictionary<string, string> parameters = new Dictionary<string, string>();
-                parameters.Add("p_id", appid);
-                JArray arr = Json.PostArr(urlTask, parameters, null, null, encoding, null);
+                parameters.Add("p_id", AppClient.appId);
+                JArray arr = Json.PostArr(AppClient.urlTask, parameters, null, null, encoding, null);
                 foreach (var r in arr)
                 {
                     string pid = r["id"].ToString();    // 服务端打印任务id
@@ -597,7 +554,7 @@ namespace PrintC
                         );
 
                     // 判断该打印任务pid是否已经在task任务表中
-                    if (ms.task.existPid(pid))
+                    if (DB.task.existPid(pid))
                     {
                         continue;
                     }
@@ -605,11 +562,11 @@ namespace PrintC
                     // 添加至打印任务表task中
                     int state = 1;
                     string created = DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss");
-                    int id = ms.task.addTask(pid, url, pic, created, state);
+                    int id = DB.task.addTask(pid, url, pic, created, state);
 
                     listTask.Add(new Task(id, pid, url, pic, state, created, created));
 
-                    Http.downloadThread(url, string.Format(@"{0}\{1}", pathImg, pic));
+                    Http.downloadThread(url, string.Format(@"{0}\{1}", AppClient.pathImg, pic));
 
                 }
             }

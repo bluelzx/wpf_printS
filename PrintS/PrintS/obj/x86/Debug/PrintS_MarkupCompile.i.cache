@@ -4,17 +4,17 @@
 winexe
 C#
 .cs
-E:\GitHub\wpf_printS\PrintS\PrintS\obj\x86\Debug\
+E:\wpf\PrintS\PrintS\obj\x86\Debug\
 PrintS
 none
 false
 DEBUG;TRACE
-E:\GitHub\wpf_printS\PrintS\PrintS\App.xaml
+E:\wpf\PrintS\PrintS\App.xaml
 5418475382
-9508341322
+5-475324715
 91679398790
-161834191801
+171997996963
 MainWindow.xaml;UC\Printing.xaml;Style\Style.xaml;UC\PrintTask.xaml;UC\RollImg.xaml;
 
-False
+True
 

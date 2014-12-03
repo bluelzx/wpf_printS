@@ -9,15 +9,17 @@ using CommonLib.DataBase;
 
 using System.Data;
 
+using DataContract.Model;
+
 namespace DataContract.Controller
 {
     public class CodeController
     {
         private Sqlite ms;
 
-        public CodeController(Sqlite _ms)
+        public CodeController()
         {
-            this.ms = _ms;
+            this.ms = AppClient.sqlite;
         }
 
         /// <summary>

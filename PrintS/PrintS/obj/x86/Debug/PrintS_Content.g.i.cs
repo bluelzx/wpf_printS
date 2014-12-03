@@ -8,14 +8,10 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-[assembly: System.Windows.Resources.AssemblyAssociatedContentFileAttribute("adv/logo.png")]
-[assembly: System.Windows.Resources.AssemblyAssociatedContentFileAttribute("bot/logo.png")]
-[assembly: System.Windows.Resources.AssemblyAssociatedContentFileAttribute("ewm/logo.png")]
 [assembly: System.Windows.Resources.AssemblyAssociatedContentFileAttribute("image/1.jpg")]
 [assembly: System.Windows.Resources.AssemblyAssociatedContentFileAttribute("image/2.png")]
 [assembly: System.Windows.Resources.AssemblyAssociatedContentFileAttribute("image/3.png")]
 [assembly: System.Windows.Resources.AssemblyAssociatedContentFileAttribute("image/4.png")]
 [assembly: System.Windows.Resources.AssemblyAssociatedContentFileAttribute("image/logo.png")]
-[assembly: System.Windows.Resources.AssemblyAssociatedContentFileAttribute("img/logo.png")]
 
 

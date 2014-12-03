@@ -16,6 +16,20 @@ E:\wpf\PrintS\PrintS\bin\Debug\System.Data.SQLite.dll
 E:\wpf\PrintS\PrintS\bin\Debug\Newtonsoft.Json.dll
 E:\wpf\PrintS\PrintS\bin\Debug\CommonLib.pdb
 E:\wpf\PrintS\PrintS\bin\Debug\DataContract.pdb
+E:\wpf\PrintS\Publish\ADV\logo.png
+E:\wpf\PrintS\Publish\BOT\logo.png
+E:\wpf\PrintS\Publish\EWM\logo.png
+E:\wpf\PrintS\Publish\IMG\logo.png
+E:\wpf\PrintS\Publish\Print\logo.png
+E:\wpf\PrintS\Publish\Print\Print.html
+E:\wpf\PrintS\Publish\Image\1.jpg
+E:\wpf\PrintS\Publish\Image\2.png
+E:\wpf\PrintS\Publish\Image\3.png
+E:\wpf\PrintS\Publish\Image\4.png
+E:\wpf\PrintS\Publish\Image\logo.png
+E:\wpf\PrintS\Publish\PrintS.exe.config
+E:\wpf\PrintS\Publish\PrintS.exe
+E:\wpf\PrintS\Publish\PrintS.pdb
 E:\wpf\PrintS\PrintS\obj\x86\Debug\PrintS.csprojResolveAssemblyReference.cache
 E:\wpf\PrintS\PrintS\obj\x86\Debug\PrintS.csproj.ResolveComReference.cache
 E:\wpf\PrintS\PrintS\obj\x86\Debug\UC\Printing.baml
@@ -38,3 +52,4 @@ E:\wpf\PrintS\PrintS\obj\x86\Debug\PrintS.Properties.Resources.resources
 E:\wpf\PrintS\PrintS\obj\x86\Debug\PrintS.csproj.GenerateResource.Cache
 E:\wpf\PrintS\PrintS\obj\x86\Debug\PrintS.exe
 E:\wpf\PrintS\PrintS\obj\x86\Debug\PrintS.pdb
+E:\wpf\PrintS\Publish\Print\photo.png

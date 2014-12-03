@@ -6,9 +6,15 @@ using System.Text;
 // CommonLib.dll
 using CommonLib;
 using CommonLib.DataBase;
+using CommonLib.Http;
 
 using System.Data;
+using System.IO;
 
+using DataContract.Model;
+
+// Newtonsoft.Json.dll
+using Newtonsoft.Json.Linq;
 
 namespace DataContract.Controller
 {
@@ -17,9 +23,9 @@ namespace DataContract.Controller
         private Sqlite ms;
         private string table;
 
-        public DataController(Sqlite _ms, string _table)
+        public DataController(string _table)
         {
-            this.ms = _ms;
+            this.ms = AppClient.sqlite;
             this.table = _table;
         }
 
@@ -123,6 +129,79 @@ namespace DataContract.Controller
             string sql = "select * from `" + this.table + "` where `state`=1 order by `id` desc limit 1";
             DataRow row = ms.getRow(sql);
             return row;
+        }
+
+        /// <summary>
+        /// 获取图片资源model形式
+        /// </summary>
+        /// <returns></returns>
+        public Data getDataModel()
+        {
+            Data data = new Data();
+            if (this.countData() > 0)
+            {
+                DataRow row = this.getData();
+                data.id = Convert.ToInt32(row["id"]);
+                data.pid = Convert.ToInt32(row["pid"]);
+                data.url = Convert.ToString(row["url"]);
+                data.pic = Convert.ToString(row["pic"]);
+                data.dated = Convert.ToString(row["dated"]);
+            }
+            return data;
+        }
+
+        /// <summary>
+        /// 获取图片资源组model数组
+        /// </summary>
+        /// <returns></returns>
+        public Data[] getDataModels()
+        {
+            List<Data> data_arr = new List<Data>();
+            if (this.countData() > 0)
+            {
+                DataRow[] rows = this.getDatas();
+                foreach (DataRow row in rows)
+                {
+                    Data data = new Data();
+                    data.id = Convert.ToInt32(row["id"]);
+                    data.pid = Convert.ToInt32(row["pid"]);
+                    data.url = Convert.ToString(row["url"]);
+                    data.pic = Convert.ToString(row["pic"]);
+                    data.dated = Convert.ToString(row["dated"]);
+                    data_arr.Add(data);
+                }
+            }
+            return data_arr.ToArray();
+        }
+
+        /// <summary>
+        /// 请求网络
+        /// </summary>
+        /// <returns></returns>
+        public JObject postUrl()
+        {
+            Encoding encoding = Encoding.GetEncoding("utf-8");
+            IDictionary<string, string> parameters = new Dictionary<string, string>();
+            parameters.Add("p_id", AppClient.appId);
+            JObject result = Json.PostObj(AppClient.urlAdv, parameters, null, null, encoding, null);
+            return result;
+        }
+
+        /// <summary>
+        /// 设置本地图片资源
+        /// </summary>
+        /// <param name="file_path">本地图片资源路径</param>
+        public void setLocalFile(string file_path)
+        {
+            // 添加数据
+            string pid = DateTime.Now.ToString("HHmmss");
+            string pic = string.Format(@"{0}.png", pid);
+            string url = string.Format(@"{0}\{1}", AppClient.pathBot, pic);
+            this.addData(pid, url, pic);
+            this.delOtherData(new string[] { pid });
+
+            // 复制文件
+            File.Copy(file_path, url, true);
         }
     }
 }

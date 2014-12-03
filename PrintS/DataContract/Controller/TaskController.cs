@@ -9,15 +9,17 @@ using CommonLib.DataBase;
 
 using System.Data;
 
+using DataContract.Model;
+
 namespace DataContract.Controller
 {
     public class TaskController
     {
         private Sqlite ms;
 
-        public TaskController(Sqlite _ms)
+        public TaskController()
         {
-            this.ms = _ms;
+            this.ms = AppClient.sqlite;
         }
 
         /// <summary>
@@ -56,7 +58,7 @@ namespace DataContract.Controller
         /// <param name="state"></param>
         public void updateTask(int id, int state)
         {
-            string updated = DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss"); 
+            string updated = DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss");
             string sql = "update `task` set `state`=@state,`updated`=@updated where `id`=@id";
             Dictionary<string, object> param = new Dictionary<string, object>();
             param.Add("@state", state);

@@ -35,6 +35,7 @@
       <HintPath>..\Newtonsoft.Json.dll</HintPath>
     </Reference>
     <Reference Include="System" />
+    <Reference Include="System.configuration" />
     <Reference Include="System.Core" />
     <Reference Include="System.Data.SQLite">
       <HintPath>..\System.Data.SQLite.DLL</HintPath>
@@ -47,6 +48,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Config\Config.cs" />
     <Compile Include="DataBase\IDataBase.cs" />
     <Compile Include="Http\Http.cs" />
     <Compile Include="Http\Json.cs" />

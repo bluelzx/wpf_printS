@@ -23,6 +23,9 @@ using DataContract.Controller;
 // .net System.Configuration
 using System.Configuration;
 
+// Conf.dll
+using Conf;
+
 using System.IO;
 using System.Data;
 using System.Windows.Threading;
@@ -41,13 +44,8 @@ namespace PrintS
         }
 
         AppStatus appSta;   // 程序状态
-        DB ms;  // 数据库task表操作
 
         DispatcherTimer tData;  // 获取数据时钟
-
-        string pathImg; // 下载图片的路径
-        string pathAdv; // 轮播图图片的路径
-        string pathEwm; // 二维码图片的路径
 
         List<Task> listTask;    // 当前预打印任务表 
         List<Adv> listAdv;      // 当前轮播图列表
@@ -58,12 +56,7 @@ namespace PrintS
             // 初始化
             //this.Topmost = true;
             appSta = AppStatus.play;
-            ms = new DB(ConfigurationManager.AppSettings["dbpath"]);
             this.txtGuide.Text = "使用说明： \r\n 1、打开微信，扫一扫二维码 \r\n 2、关注微信后，发送图片 \r\n 3、输入“随心码”，即可打印照片";
-            // 程序用路径
-            pathImg = string.Format(@"{0}\IMG", AppDomain.CurrentDomain.BaseDirectory);
-            pathAdv = string.Format(@"{0}\ADV", AppDomain.CurrentDomain.BaseDirectory);
-            pathEwm = string.Format(@"{0}\EWM", AppDomain.CurrentDomain.BaseDirectory);
             // 显示用数据队列
             listTask = new List<Task>();
             listAdv = new List<Adv>();
@@ -93,7 +86,7 @@ namespace PrintS
         void tData_Tick(object sender, EventArgs e)
         {
             // 获取可能有的消息
-            Dictionary<string, object> message = ms.prints.getLastMsg();
+            Dictionary<string, object> message = DB.prints.getLastMsg();
             switch ((MessageCode)message["code"])
             {
                 // 打印机缺纸
@@ -144,7 +137,7 @@ namespace PrintS
             int printLimit = 30;
 
             // 记录操作，告诉PrintC程序
-            ms.printc.addMessage(MessageCode.printPaper, printLimit);
+            DB.printc.addMessage(MessageCode.printPaper, printLimit);
 
             // 启动程序继续运行
             appSta = AppStatus.play;
@@ -156,10 +149,10 @@ namespace PrintS
         void showAdv()
         {
             listAdv.Clear();
-            int count = ms.adv.countData();
+            int count = DB.adv.countData();
             if (count > 0)
             {
-                DataRow[] rows = ms.adv.getDatas();
+                DataRow[] rows = DB.adv.getDatas();
                 foreach (DataRow row in rows)
                 {
                     listAdv.Add(new Adv(row["id"], row["pid"], row["url"], row["pic"], row["dated"]));
@@ -172,7 +165,7 @@ namespace PrintS
                 BitmapImage img;
                 try
                 {
-                    img = new BitmapImage(new Uri(string.Format(@"{0}\{1}", pathAdv, a.pic)));
+                    img = new BitmapImage(new Uri(string.Format(@"{0}\{1}", AppClient.pathAdv, a.pic)));
                 }
                 catch (Exception ex)
                 {
@@ -195,10 +188,10 @@ namespace PrintS
             // 刷新二维码显示
             listEwm.Clear();
 
-            int count = ms.ewm.countData();
+            int count = DB.ewm.countData();
             if (count > 0)
             {
-                DataRow row = ms.ewm.getData();
+                DataRow row = DB.ewm.getData();
                 listEwm.Add(new Ewm(row["id"], row["pid"], row["url"], row["pic"], row["dated"]));
             }
 
@@ -209,7 +202,7 @@ namespace PrintS
                 {
                     img = new BitmapImage(
                         new Uri(string.Format(@"{0}\{1}",
-                            pathEwm,
+                            AppClient.pathEwm,
                             listEwm[0].pic)
                             ));
                 }
@@ -226,7 +219,7 @@ namespace PrintS
         /// </summary>
         void showCode()
         {
-            string code = ms.code.getLastCode();
+            string code = DB.code.getLastCode();
             this.txtCode.Text = code;
         }
 
@@ -244,10 +237,10 @@ namespace PrintS
 
             // 刷新打印任务列表
             listTask.Clear();
-            int count = ms.task.countTask(1);
+            int count = DB.task.countTask(1);
             if (count > 0)
             {
-                DataRow[] rows = ms.task.getTasks(1);
+                DataRow[] rows = DB.task.getTasks(1);
                 foreach (DataRow row in rows)
                 {
                     listTask.Add(new Task(row["id"], row["pid"], row["url"], row["pic"], row["state"], row["created"], row["updated"]));
@@ -261,7 +254,7 @@ namespace PrintS
                 BitmapImage img;
                 try
                 {
-                    img = new BitmapImage(new Uri(string.Format(@"{0}\{1}", pathImg, t.pic)));
+                    img = new BitmapImage(new Uri(string.Format(@"{0}\{1}", AppClient.pathImg, t.pic)));
                 }
                 catch (Exception ex)
                 {
